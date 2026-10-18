@@ -1,23 +1,27 @@
 ---
 name: Feature Request
-about: Suggest an idea or enhancement for DocuMind AI
+about: Suggest an enhancement, new capability, or optimization for DocuMind AI
 title: "[FEATURE] "
 labels: ["enhancement"]
 assignees: ""
 ---
 
-## 💡 Feature Summary
-A clear and concise description of the proposed feature or enhancement.
+## 💡 Feature Overview
+A clear and concise summary of the proposed capability.
 
-## 🎯 Problem Statement / Motivation
-Is your feature request related to a problem or workflow limitation?
-*e.g. I want to ingest Markdown notes or Word documents, but only PDFs are supported.*
+## 🎯 Motivation & Problem Statement
+Explain why this feature would be valuable to users and contributors.
+*(e.g., "I want to query multi-modal documents, or ingest Markdown and Word files alongside PDFs.")*
 
-## 🛠️ Proposed Solution
-Describe how you envision this feature working within the application (architecture, UI changes, dependencies).
+## 🛠️ Proposed Implementation
+Describe how you envision this feature working:
+- **Component**: [e.g., `rag/document_loader.py`, `ui/components.py`, `services/chat_service.py`, `app.py`]
+- **New Dependencies** (if any): [e.g., `python-docx`, `pytesseract`]
+- **UI / Workflow changes**:
 
 ## 🔄 Alternatives Considered
-A clear description of any alternative solutions or workarounds you've considered.
+Any alternative approaches or workarounds you have considered.
 
-## 📑 Additional Context
-Add any other context, mockups, or screenshots about the feature request here.
+## 🤝 Willingness to Contribute
+- [ ] I would like to submit a Pull Request implementing this feature myself!
+- [ ] I would appreciate guidance from a maintainer on how to implement this.

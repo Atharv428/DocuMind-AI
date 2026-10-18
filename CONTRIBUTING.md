@@ -1,27 +1,35 @@
 # Contributing to DocuMind AI
 
-Thank you for your interest in contributing to **DocuMind AI**! We welcome contributions from developers, researchers, open-source maintainers, and AI engineers of all experience levels.
+Thank you for your interest in contributing to **DocuMind AI**! We welcome contributions from developers, students, researchers, open-source maintainers, and AI engineers of all experience levels.
 
-This document outlines the guidelines and workflow for contributing to the project.
+Whether you are fixing a typo, adding document loaders, optimizing RAG prompt templates, or expanding test coverage, your help makes DocuMind AI better for everyone.
 
----
-
-## 🌟 Types of Contributions Welcome
-
-We actively encourage:
-- **Bug Fixes**: Resolving issues with document parsing, chunking, retrieval, or UI edge cases.
-- **New Features**: Expanding support for additional document formats (Markdown, DOCX, TXT), OCR support (Tesseract/PaddleOCR), or chat response streaming.
-- **RAG & Prompt Optimizations**: Enhancing chunking strategies, retrieval reranking, or grounding prompts for local LLMs.
-- **Documentation**: Improving guides, tutorials, setup walkthroughs, and inline code documentation.
-- **Tests**: Expanding automated test coverage for retrieval accuracy, vector store operations, and pipeline fallbacks.
+> 💡 **Looking for a good place to start?**
+> Check out our curated [Starter Issues Backlog](https://github.com/Atharv428/DocuMind-AI/blob/main/docs/STARTER_ISSUES.md) for small, beginner-friendly tasks!
 
 ---
 
-## 🛠️ Development Setup
+## 🌟 Contribution Opportunities
+
+We actively encourage contributions across multiple areas:
+- **Beginner-Friendly Fixes**: Clearer error messages, expanded troubleshooting docs, improved empty states.
+- **Document Ingestion**: Support for additional file formats (`.txt`, `.md`, `.docx`), OCR support for scanned documents using Tesseract.
+- **RAG Pipeline Enhancements**: Query rewriting, semantic reranking, hybrid keyword/vector search (BM25 + embeddings).
+- **LLM Synthesis & Streaming**: Token streaming with `st.write_stream`, customizable system prompts, multi-model benchmarking.
+- **Test Suite Expansion**: Additional pytest test cases for chunking edge cases, vector store filtering, and malformed file handling.
+- **UI & Accessibility**: Streamlit component polish, mobile view optimizations, keyboard shortcuts.
+
+---
+
+## 🛠️ Development Setup (Windows PowerShell)
+
+DocuMind AI is developed with **Python 3.13+** on Windows. Follow these steps to set up your local development environment:
 
 ### 1. Fork and Clone the Repository
 
-Fork the repository on GitHub, then clone your fork locally:
+Fork the repository on GitHub by clicking the **Fork** button at [https://github.com/Atharv428/DocuMind-AI](https://github.com/Atharv428/DocuMind-AI).
+
+Clone your fork locally:
 
 ```powershell
 git clone https://github.com/<your-username>/DocuMind-AI.git
@@ -30,120 +38,175 @@ cd DocuMind-AI
 
 ### 2. Set Up a Virtual Environment
 
-Ensure you are using **Python 3.13+**:
+Create and activate a dedicated virtual environment:
 
 ```powershell
 py -3.13 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
+*(Note: If PowerShell blocks script execution, run: `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`)*
+
 *(On Linux / macOS: `python3 -m venv .venv && source .venv/bin/activate`)*
 
 ### 3. Install Dependencies
+
+Upgrade pip and install all required packages:
 
 ```powershell
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-### 4. Configure Local Environment
+### 4. Configure Environment Variables
 
-Copy the template configuration file:
+Copy the template environment file:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-Ensure Ollama is installed and running locally with the recommended model:
+The default `.env` configuration is pre-tuned for local-first execution:
+- `LLM_PROVIDER=ollama`
+- `OLLAMA_BASE_URL=http://localhost:11434`
+- `OLLAMA_MODEL=llama3.2:1b`
+- `EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2`
+- `CHROMA_PATH=./data/chroma`
+
+### 5. Start Ollama and Pull the Model
+
+DocuMind AI utilizes Ollama for local LLM generation. Ensure Ollama is installed from [ollama.com](https://ollama.com/download) and running:
 
 ```powershell
 ollama pull llama3.2:1b
 ```
 
-### 5. Launch the Application
+Verify that the Ollama service is reachable by visiting `http://localhost:11434` or running:
+
+```powershell
+curl http://localhost:11434/api/tags
+```
+
+### 6. Launch the Application
+
+Start the local Streamlit development server:
 
 ```powershell
 streamlit run app.py
 ```
 
----
+The dashboard will open automatically in your browser at `http://localhost:8501`.
 
-## 🌿 Branching Strategy & Workflow
-
-1. **Create a Feature Branch**:
-   Always branch off `main` with a descriptive name:
-   ```bash
-   git checkout -b feat/your-feature-name
-   # or
-   git checkout -b fix/issue-description
-   ```
-
-2. **Develop and Test**:
-   Make focused, modular changes. Ensure that all existing and new tests pass:
-   ```powershell
-   python -m pytest
-   ```
-
-3. **Check Code Formatting & Syntax**:
-   Ensure Python files compile cleanly without syntax errors:
-   ```powershell
-   python -m py_compile app.py rag/*.py services/*.py ui/*.py
-   ```
+*(If port 8501 is occupied by another process, run: `streamlit run app.py --server.port 8502`)*
 
 ---
 
-## 📝 Commit Message Conventions
+## 🧪 Testing Guidelines
 
-We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification:
+We require all pull requests to pass automated tests and syntax compilation before merging.
 
-- `feat:` A new feature or capability
-- `fix:` A bug fix
-- `docs:` Documentation improvements
-- `refactor:` Code restructuring without functional changes
-- `test:` Adding or updating tests
-- `chore:` Maintenance, dependency bumps, or tooling updates
+### 1. Run the Full Test Suite
 
-**Example**:
-```text
-feat(rag): add support for semantic passage reranking
-fix(loader): handle corrupted PDF headers gracefully
-docs(readme): clarify Ollama installation steps for Windows
+```powershell
+python -m pytest
 ```
 
+All 21+ tests should pass:
+```text
+tests/test_chunker.py .
+tests/test_document_loader.py .
+tests/test_features_workflow.py .
+tests/test_local_rag.py .
+tests/test_ollama_generator.py .
+tests/test_pipeline.py .
+tests/test_retriever.py .
+```
+
+### 2. Verify Python Syntax
+
+```powershell
+python -m py_compile app.py rag/*.py services/*.py ui/*.py
+```
+
+### 3. Writing New Tests
+
+- Place test files in the `tests/` directory named `test_<feature>.py`.
+- Use `pytest` fixtures like `tmp_path` for temporary file creation.
+- Never use real personal or sensitive documents in tests; use purely synthetic lorem-ipsum or mock data.
+
 ---
 
-## 🔒 Security & Privacy Rules
+## 🌿 Branching & Development Workflow
+
+1. **Keep Your Fork Synchronized**:
+   ```bash
+   git remote add upstream https://github.com/Atharv428/DocuMind-AI.git
+   git fetch upstream
+   git checkout main
+   git merge upstream/main
+   ```
+
+2. **Create a Topic Branch**:
+   Always work on a focused branch off `main`:
+   ```bash
+   git checkout -b feat/add-markdown-loader
+   # or
+   git checkout -b fix/ollama-timeout-handling
+   ```
+
+3. **Follow Code Style Expectations**:
+   - Write clean, readable, modular Python code.
+   - Use explicit type annotations (`from __future__ import annotations`, `list[dict]`, `str | None`).
+   - Maintain separation of concerns:
+     - `rag/`: Ingestion, chunking, embeddings, vector storage, and generation.
+     - `services/`: Document registry and session state persistence.
+     - `ui/`: CSS theme tokens and Streamlit component widgets.
+     - `app.py`: Top-level application layout and view orchestration.
+   - Preserve existing docstrings and comments.
+
+4. **Commit with Conventional Commits**:
+   ```bash
+   git add <modified-files>
+   git commit -m "feat(loader): add markdown file extraction support"
+   ```
+   Prefixes:
+   - `feat:` New functionality
+   - `fix:` Bug fix
+   - `docs:` Documentation improvements
+   - `refactor:` Code restructuring without functional changes
+   - `test:` Adding or updating tests
+   - `chore:` Tooling or dependency maintenance
+
+---
+
+## 🔒 Security & Privacy Rules (Strict)
 
 When submitting contributions, you **must ensure**:
 - **No Secrets**: Never commit `.env` files, API keys, tokens, or credentials.
-- **No Private Data**: Never commit private PDF documents, personal notes, or proprietary files.
-- **Sanitized Fixtures**: Any test documents added to the repository must contain purely synthetic, public, or lorem-ipsum content.
-- **Sanitized Errors**: Exception handlers must never print raw API keys into logs or user-facing messages.
+- **No Private Documents**: Never commit private personal PDF documents or user ChromaDB databases.
+- **Test Fixture Sanitization**: Any sample documents added to the repository must contain purely synthetic or public sample text.
+- **Credential Masking**: Any code handling API keys must sanitize error messages with `[API_KEY_HIDDEN]`.
 
 ---
 
-## 🚀 Submitting a Pull Request (PR)
+## 🚀 Pull Request Checklist
 
-1. **Push to Your Fork**:
-   ```bash
-   git push origin feat/your-feature-name
-   ```
+Before opening your pull request at [https://github.com/Atharv428/DocuMind-AI/pulls](https://github.com/Atharv428/DocuMind-AI/pulls), ensure:
 
-2. **Open a Pull Request**:
-   - Go to `https://github.com/Atharv428/DocuMind-AI`
-   - Click **Compare & pull request**
-   - Fill out the PR template with a clear description of your changes, motivation, and test verification.
-
-3. **Code Review**:
-   - Maintainers will review your PR, suggest improvements, and run automated checks.
-   - Address feedback constructively and keep commits focused.
+- [ ] Code is developed on a dedicated feature branch (not on `main`).
+- [ ] Python syntax passes: `python -m py_compile app.py rag/*.py services/*.py ui/*.py`.
+- [ ] All automated tests pass: `python -m pytest`.
+- [ ] Application launches cleanly in Streamlit without runtime errors.
+- [ ] No private `.env` files or credentials are staged (`git status`).
+- [ ] Conventional Commit message standards are followed.
+- [ ] PR description clearly explains the motivation, changes made, and verification steps.
 
 ---
 
-## 🤝 Code of Conduct & Expectations
+## 🤝 Community & Code of Conduct
 
-- Be respectful, constructive, and welcoming to all participants.
-- Provide thoughtful feedback during code reviews.
-- Focus on technical merit, maintainability, and user privacy.
+- Be welcoming, respectful, and encouraging to all contributors.
+- Provide constructive, supportive feedback during code reviews.
+- Focus on user privacy, local-first performance, and codebase reliability.
 
-Thank you for helping make DocuMind AI better for everyone!
+Thank you for contributing to **DocuMind AI**!

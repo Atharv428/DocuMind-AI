@@ -1,27 +1,37 @@
-## 📌 Description
-Provide a concise explanation of what this Pull Request introduces, changes, or fixes.
+## 📌 Pull Request Overview
+Provide a clear, high-level summary of what this Pull Request changes, adds, or fixes.
 
-Fixes #(issue number if applicable)
+Closes #(issue number if applicable)
 
-## 🛠️ Type of Change
-- [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
-- [ ] ✨ New feature (non-breaking change which adds functionality)
-- [ ] ⚡ Performance optimization
-- [ ] 📝 Documentation update
-- [ ] 🧪 Testing improvement
-- [ ] 🎨 UI / Styling enhancement
+---
 
-## 🧪 Testing Checklist
-- [ ] Python syntax passes: `python -m py_compile app.py rag/*.py services/*.py ui/*.py`
-- [ ] All automated tests pass: `python -m pytest`
-- [ ] Verified manually against local Streamlit instance (`http://localhost:8501`)
-- [ ] Tested with local Ollama (`llama3.2:1b`)
+## 🛠️ Category of Change
+- [ ] 🐛 Bug fix (non-breaking change which resolves a reported issue)
+- [ ] ✨ New feature (non-breaking enhancement adding functionality)
+- [ ] ⚡ Performance / RAG retrieval optimization
+- [ ] 📝 Documentation & setup guide improvement
+- [ ] 🧪 Testing & test suite expansion
+- [ ] 🎨 UI & visual aesthetic enhancement
 
-## 🔒 Privacy & Security Verification
-- [ ] No `.env` files, API keys, or personal tokens are included.
-- [ ] No private or personal PDF documents are committed.
-- [ ] Any test fixtures contain only synthetic, public sample text.
-- [ ] Sensitive exception messages mask API credentials with `[API_KEY_HIDDEN]`.
+---
 
-## 📷 Screenshots / Demos (if applicable)
-Attach screenshots or GIFs illustrating UI changes.
+## 🧪 Verification & Testing Checklist
+Please check all that apply:
+- [ ] **Python Syntax**: All modified Python files compile cleanly (`python -m py_compile app.py rag/*.py services/*.py ui/*.py`)
+- [ ] **Automated Tests**: Test suite passes without errors (`python -m pytest`)
+- [ ] **Local Interface Tested**: Tested locally in Streamlit (`streamlit run app.py`)
+- [ ] **Ollama Verified**: Verified with local Ollama (`llama3.2:1b`) or verified fallback behavior
+- [ ] **Responsive UI**: Verified on desktop and narrower window viewports
+
+---
+
+## 🔒 Privacy & Clean Code Assurance
+- [ ] **Zero Credentials**: Confirmed no `.env` files, API keys, tokens, or credentials are committed.
+- [ ] **Zero Private Documents**: Confirmed no real personal PDF files or private ChromaDB indices are committed.
+- [ ] **Test Fixtures**: Any added test files contain solely synthetic or mock text.
+- [ ] **Clean Git History**: Commits follow [Conventional Commits](https://www.conventionalcommits.org/) standards.
+
+---
+
+## 📷 Screenshots / Visual Demos (if applicable)
+Attach before/after screenshots or GIFs demonstrating UI enhancements.

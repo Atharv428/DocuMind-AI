@@ -1,32 +1,34 @@
 ---
 name: Bug Report
-about: Create a report to help us improve DocuMind AI
+about: Report an unexpected error, crash, or broken feature in DocuMind AI
 title: "[BUG] "
 labels: ["bug"]
 assignees: ""
 ---
 
-## 🐛 Bug Description
-A clear and concise description of what the bug is.
+## 🐛 Bug Summary
+A clear and concise description of the issue.
 
 ## 🔁 Steps to Reproduce
-1. Start the application: `streamlit run app.py`
-2. Navigate to view: '...'
-3. Upload file / Ask question: '...'
-4. See error: '...'
+1. Start DocuMind AI: `streamlit run app.py`
+2. Navigate to view: `[e.g., Overview, Chat with Documents, Document Library, Summaries, Compare Documents, Passage Search]`
+3. Perform action: `[e.g., Upload specific PDF, ask question, click delete]`
+4. Encounter error: `[Describe observed behavior or error message]`
 
 ## 🎯 Expected Behavior
-A clear and concise description of what you expected to happen.
+A concise description of what you expected to happen.
 
-## 🖥️ Environment Information
-- **OS**: [e.g. Windows 11, Ubuntu 24.04, macOS Sonoma]
-- **Python Version**: [e.g. 3.13.1]
-- **Ollama Version**: [e.g. 0.6.3]
-- **Ollama Model**: [e.g. llama3.2:1b]
-- **Streamlit Version**: [e.g. 1.40.0]
+## 🖥️ System & Environment Details
+- **Operating System**: [e.g., Windows 11, Ubuntu 24.04, macOS Sonoma]
+- **Python Version**: `3.13.x`
+- **Active AI Engine**: [e.g., Ollama (llama3.2:1b), Google Gemini, Local Passage Retrieval]
+- **Ollama Version**: [e.g., 0.6.3 (run `ollama --version`)]
+- **Streamlit Version**: [e.g., 1.40.0]
 
-## 📋 Console Logs & Screenshots
-If applicable, paste relevant console error logs (ensure all secrets/passwords are removed) or attach screenshots.
+## 📋 Console Logs & Tracebacks
+```text
+# Paste error output here (ensure all API keys, personal file paths, and tokens are removed!)
+```
 
-## 📝 Additional Context
-Add any other context about the problem here.
+## 🔒 Privacy Check
+- [ ] I have confirmed that no private credentials, API keys, or confidential document text are included in this report.

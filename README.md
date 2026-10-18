@@ -97,6 +97,66 @@ flowchart TD
 
 ---
 
+## 🤝 Contributing to DocuMind AI
+
+We are actively building **DocuMind AI** as an open-source, community-driven document intelligence platform! Whether you are a student exploring AI engineering, a seasoned Python developer, or an open-source contributor, your ideas and contributions are warmly welcomed.
+
+<div align="center">
+
+[![Starter Issues](https://img.shields.io/badge/Good_First_Issues-docs%2FSTARTER__ISSUES.md-6366f1?style=for-the-badge&logo=github)](https://github.com/Atharv428/DocuMind-AI/blob/main/docs/STARTER_ISSUES.md)
+[![Open Issues](https://img.shields.io/badge/GitHub-Open_Issues-38bdf8?style=for-the-badge&logo=github)](https://github.com/Atharv428/DocuMind-AI/issues)
+[![Pull Requests](https://img.shields.io/badge/GitHub-Pull_Requests-10b981?style=for-the-badge&logo=github)](https://github.com/Atharv428/DocuMind-AI/pulls)
+[![Contributing Guide](https://img.shields.io/badge/Guide-CONTRIBUTING.md-f59e0b?style=for-the-badge&logo=git)](https://github.com/Atharv428/DocuMind-AI/blob/main/CONTRIBUTING.md)
+
+</div>
+
+### 🌟 Quick Navigation & Community Links
+- **Contributing Guide**: Read [CONTRIBUTING.md](https://github.com/Atharv428/DocuMind-AI/blob/main/CONTRIBUTING.md) for full Windows development setup, code style, and PR guidelines.
+- **Starter Issues Backlog**: Check out [docs/STARTER_ISSUES.md](https://github.com/Atharv428/DocuMind-AI/blob/main/docs/STARTER_ISSUES.md) for curated, beginner-friendly tasks.
+- **Found a Bug?**: Submit a structured [Bug Report](https://github.com/Atharv428/DocuMind-AI/issues/new?template=bug_report.md).
+- **Have an Idea?**: Propose a new capability via [Feature Request](https://github.com/Atharv428/DocuMind-AI/issues/new?template=feature_request.md).
+- **View Active Issues**: Browse existing [GitHub Issues](https://github.com/Atharv428/DocuMind-AI/issues).
+- **Security Concerns**: Report sensitive issues privately using our [Security Policy](https://github.com/Atharv428/DocuMind-AI/blob/main/SECURITY.md).
+
+### 🚀 First-Time Contributor Workflow (5 Steps)
+
+```mermaid
+flowchart LR
+    A["1. Fork Repo"] --> B["2. Create Branch\n(feat/my-feature)"]
+    B --> C["3. Code & Verify"]
+    C --> D["4. Run Pytest\n(21+ tests)"]
+    D --> E["5. Open PR"]
+```
+
+1. **Fork the Repository**: Visit [https://github.com/Atharv428/DocuMind-AI/fork](https://github.com/Atharv428/DocuMind-AI/fork) and create your personal fork.
+2. **Create a Feature Branch**:
+   ```bash
+   git checkout -b feat/your-feature-name
+   ```
+3. **Develop Your Changes**: Make focused, modular changes in `rag/`, `ui/`, `services/`, or `docs/`.
+4. **Run Tests & Syntax Verification**:
+   ```powershell
+   python -m py_compile app.py rag/*.py services/*.py ui/*.py
+   python -m pytest
+   ```
+5. **Open a Pull Request**: Push to your fork and submit a PR to `main` at [https://github.com/Atharv428/DocuMind-AI/pulls](https://github.com/Atharv428/DocuMind-AI/pulls).
+
+### 📋 Active Contribution Opportunities Checklist
+
+Looking for meaningful ways to contribute? Here are high-impact areas currently open for contribution:
+
+- [ ] **Starter Tasks**: Work on one of our curated beginner tasks in [`docs/STARTER_ISSUES.md`](https://github.com/Atharv428/DocuMind-AI/blob/main/docs/STARTER_ISSUES.md).
+- [ ] **Document Format Loaders**: Add parsers for Markdown (`.md`), plain text (`.txt`), Word (`.docx`), or EPUB files.
+- [ ] **Response Streaming**: Implement token streaming with Streamlit's `st.write_stream` and Ollama's stream API.
+- [ ] **OCR Ingestion**: Integrate Tesseract or PaddleOCR for scanned image-only PDF documents.
+- [ ] **RAG Optimizations**: Implement BM25 keyword search alongside vector search (hybrid retrieval) or passage reranking.
+- [ ] **UI & Accessibility Polish**: Improve mobile layouts, add keyboard shortcuts, or enhance loading skeleton cards.
+- [ ] **Test Coverage**: Write additional edge-case unit tests for corrupted PDF detection and chunk boundary preservation.
+
+> **Our Community Commitment**: Every contribution matters! We review all pull requests with constructive feedback, provide guidance to first-time contributors, and celebrate community additions.
+
+---
+
 ## 🛠️ Verified Technology Stack
 
 | Layer | Technology | Version | Purpose |
@@ -329,11 +389,12 @@ tests\test_retriever.py .                                                [100%]
 
 ---
 
-## 🤝 Contributing
+## 🤝 Community & Support
 
-Contributions are warmly welcome! Whether you are fixing bugs, optimizing prompts, adding document loaders, or improving documentation, please read our [CONTRIBUTING.md](CONTRIBUTING.md) guide before opening a pull request.
-
-Please review our [SECURITY.md](SECURITY.md) for information on reporting security vulnerabilities.
+- **Contribution Guidelines**: Please review our [CONTRIBUTING.md](CONTRIBUTING.md) guide before submitting pull requests.
+- **Starter Issues Backlog**: Check out [docs/STARTER_ISSUES.md](docs/STARTER_ISSUES.md) for small, beginner-friendly tasks.
+- **Issue Tracker**: View [Open Issues](https://github.com/Atharv428/DocuMind-AI/issues), submit a [Bug Report](https://github.com/Atharv428/DocuMind-AI/issues/new?template=bug_report.md), or suggest an idea via [Feature Request](https://github.com/Atharv428/DocuMind-AI/issues/new?template=feature_request.md).
+- **Security Disclosures**: Please review [SECURITY.md](SECURITY.md) to report security or privacy vulnerabilities responsibly.
 
 ---
 

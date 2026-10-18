@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🔒 Security Vulnerability Report
+    url: https://github.com/Atharv428/DocuMind-AI/blob/main/SECURITY.md
+    about: Please report security vulnerabilities privately according to our security policy.
+  - name: 🚀 Starter Issues & Good First Tasks
+    url: https://github.com/Atharv428/DocuMind-AI/blob/main/docs/STARTER_ISSUES.md
+    about: Browse curated beginner-friendly tasks and feature backlogs.
+  - name: 📖 Contribution Guidelines
+    url: https://github.com/Atharv428/DocuMind-AI/blob/main/CONTRIBUTING.md
+    about: Learn how to set up the dev environment, run tests, and open PRs.
