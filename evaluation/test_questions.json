@@ -1,0 +1,14 @@
+[
+  {
+    "question": "What are the main findings of the document?",
+    "expected_document": "sample.pdf",
+    "expected_pages": [1, 2],
+    "notes": "Check that retrieved chunks match the relevant pages."
+  },
+  {
+    "question": "Which conclusion is supported by the source material?",
+    "expected_document": "sample.pdf",
+    "expected_pages": [2],
+    "notes": "The answer should rely on the evidence in the document rather than unknown context."
+  }
+]
