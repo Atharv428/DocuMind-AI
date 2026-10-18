@@ -11,6 +11,8 @@
 [![Ollama](https://img.shields.io/badge/Ollama-llama3.2:1b-000000?style=for-the-badge&logo=ollama&logoColor=white)](https://ollama.com/)
 [![ChromaDB](https://img.shields.io/badge/ChromaDB-Vector_Store-FF6B6B?style=for-the-badge)](https://www.trychroma.com/)
 [![Sentence Transformers](https://img.shields.io/badge/Embeddings-all--MiniLM--L6--v2-FFA000?style=for-the-badge)](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+
 </div>
 
 <div align="center">
@@ -19,14 +21,15 @@
 
 ---
 
-## 📌 Problem Statement
+## 📌 Project Overview & Problem Statement
 
-Knowledge workers, researchers, and developers interact with dense, unstructured PDF documents every day—financial reports, academic papers, legal agreements, and technical manuals. Traditional keyword search (`Ctrl+F`) fails to grasp semantic meaning or answer conceptual questions, while public cloud LLMs introduce serious data privacy risks and recurrent API costs when processing proprietary documents.
+Knowledge workers, researchers, legal analysts, and engineers routinely navigate massive, unstructured PDF documents—financial filings, technical manuals, research publications, and policy agreements. Traditional keyword search (`Ctrl+F`) lacks semantic comprehension, cannot answer multi-part questions, and cannot synthesize concepts across multiple pages. Conversely, uploading proprietary or personal documents to public cloud AI APIs introduces severe privacy risks, confidentiality breaches, and recurring cloud costs.
 
-**DocuMind AI** bridges this divide by delivering an end-to-end, local-first **Retrieval-Augmented Generation (RAG)** system:
-- **100% Local-First Inference**: Documents, chunk embeddings, and LLM text generation can run completely on your local workstation without external cloud dependencies.
-- **Strictly Grounded Answers**: Prompt engineering guarantees responses derive only from retrieved source passages with zero unsupported claims.
+**DocuMind AI** solves this problem by delivering a **local-first Retrieval-Augmented Generation (RAG)** workspace:
+- **100% Data Locality**: Document parsing, text chunking, dense vector embeddings, and LLM text generation can run completely on your local workstation without external cloud transmission.
+- **Strict Anti-Hallucination Grounding**: Formatted prompts instruct the generative engine to synthesize responses exclusively from retrieved source passages.
 - **Verifiable Citations**: Every generated answer is accompanied by exact document filenames, 1-indexed page numbers, chunk identifiers, and similarity distance scores.
+- **Multi-Provider Flexibility**: Operate completely offline with local **Ollama (`llama3.2:1b`)**, switch optionally to **Google Gemini Cloud**, or use **Passage Retrieval Only** mode without any LLM requirement.
 
 ---
 
@@ -66,15 +69,26 @@ flowchart TD
 
 ---
 
+## ⚙️ How It Works (The 7-Stage RAG Pipeline)
+
+1. **Ingestion & Validation**: Incoming files are checked for valid `%PDF` magic bytes, unencrypted status, and a 25 MB file size limit. PyMuPDF (`fitz`) extracts clean text page-by-page while maintaining 1-indexed page geometry.
+2. **Text Normalization**: Extracted text undergoes NFC Unicode normalization, stripping non-printable control characters and collapsing excessive whitespace to prevent indexing anomalies.
+3. **Sliding-Window Chunking**: Documents are split into configurable semantic segments (default: 600 words) with sliding-window overlap (default: 100 words), ensuring context preservation across page boundaries.
+4. **Dense Vector Embeddings**: Each text chunk is converted into a 384-dimensional dense vector using Hugging Face's `sentence-transformers/all-MiniLM-L6-v2`. Embeddings are normalized for cosine distance calculations.
+5. **Persistent Vector Storage**: Vectors, text passages, and structured metadata (document ID, filename, page number, chunk index) are indexed in local ChromaDB collections using Hierarchical Navigable Small World (HNSW) graphs.
+6. **Semantic Similarity Retrieval**: User questions are embedded in real time. ChromaDB performs vector similarity search to return the top-$K$ most relevant passages along with cosine distance metrics.
+7. **Grounded Generation & Citations**: The retrieved passages are formatted into a grounded prompt. The configured LLM (Ollama `llama3.2:1b` or Gemini) generates an answer strictly based on the provided text, accompanied by clickable source citation cards.
+
+---
+
 ## 🚀 Key Features
 
 - **Document Ingestion & Validation**: Fast, memory-safe text extraction using `PyMuPDF` with 1-indexed page geometry, file size limits (up to 25 MB), and `%PDF` magic byte verification.
-- **Deduplication Engine**: Computes SHA-256 hashes of incoming files to prevent redundant embeddings and preserve vector store integrity.
-- **Configurable Chunking**: Sliding-window text chunker with configurable chunk size (default: 600 words) and token overlap (default: 100 words).
+- **SHA-256 Deduplication**: Computes cryptographic hashes of incoming files to prevent redundant embeddings and preserve vector store integrity.
 - **Dense Vector Search**: Generates 384-dimensional normalized vector embeddings using Hugging Face's `sentence-transformers/all-MiniLM-L6-v2`.
-- **Persistent ChromaDB**: Persistent local storage using Hierarchical Navigable Small World (HNSW) graphs with cosine distance metrics.
+- **Persistent ChromaDB**: Persistent local vector storage using HNSW graphs with cosine distance metrics.
 - **Ollama Local LLM Generation**: Native integration with local Ollama (`llama3.2:1b` or any installed model) for private question answering.
-- **Hybrid AI Engine**: Seamlessly switch between Ollama (100% offline), Google Gemini (Cloud API), or Direct Passage Retrieval mode.
+- **Hybrid AI Engine**: Seamlessly switch between Ollama (100% offline), Google Gemini (Cloud API), or Direct Passage Retrieval mode in Settings.
 - **Authentic Citations**: Interactive citation cards displaying document name, exact page number, chunk index, and relevance similarity percentage.
 - **Executive Summaries**: Generate structured briefs, key findings, and action items from indexed documents.
 - **Cross-Document Comparison**: Compare multiple documents simultaneously to identify differences, overlaps, and unique takeaways.
@@ -145,6 +159,7 @@ Your `.env` file comes preconfigured with local-first defaults:
 LLM_PROVIDER=ollama
 OLLAMA_BASE_URL=http://localhost:11434
 OLLAMA_MODEL=llama3.2:1b
+OLLAMA_TIMEOUT=60
 EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
 CHROMA_PATH=./data/chroma
 UPLOADS_PATH=./data/uploads
@@ -152,6 +167,7 @@ TOP_K=4
 CHUNK_SIZE=600
 CHUNK_OVERLAP=100
 TEMPERATURE=0.2
+MAX_FILE_SIZE_MB=25
 ```
 
 *(Optional)* If you wish to use Google Gemini instead of Ollama, add your key to `.env`:
@@ -177,6 +193,25 @@ http://localhost:8501
 
 ---
 
+## 🔧 Configuration & Troubleshooting
+
+### Ollama Connectivity
+- **Symptom**: Top status badge displays `Ollama Offline`.
+- **Fix**: Verify that the Ollama service is running by visiting `http://localhost:11434` in your browser. Start Ollama from your Start menu or run `ollama serve` in a terminal.
+- **Model Check**: Run `ollama list` to confirm `llama3.2:1b` is installed. If missing, run `ollama pull llama3.2:1b`.
+
+### Port Conflicts (`Port 8501 is not available`)
+- If port 8501 is occupied by another process, run Streamlit on an alternate port:
+  ```powershell
+  streamlit run app.py --server.port 8502
+  ```
+
+### ChromaDB Migration or Lock Issues
+- ChromaDB stores persistent SQLite and index data in `./data/chroma`.
+- If an unexpected lock occurs after a system crash, ensure all running Python instances are terminated before restarting.
+
+---
+
 ## 📂 Project Structure
 
 ```text
@@ -186,7 +221,17 @@ DocuMind-AI/
 ├── pytest.ini                  # Pytest configuration
 ├── .env.example                # Template configuration with local-first defaults
 ├── .gitignore                  # Git privacy & hygiene rules
-├── README.md                   # Project documentation
+├── README.md                   # Comprehensive project documentation
+├── CONTRIBUTING.md             # Open-source contribution guidelines
+├── SECURITY.md                 # Security policy & responsible disclosure
+├── LICENSE                     # MIT License
+├── assets/                     # Authentic application screenshots & graphics
+│   └── dashboard.png           # High-resolution dashboard screenshot
+├── .github/                    # GitHub community health templates
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug_report.md       # Standardized bug reporting form
+│   │   └── feature_request.md  # Feature suggestion template
+│   └── pull_request_template.md# Pull request validation checklist
 ├── rag/                        # RAG pipeline modules
 │   ├── __init__.py             # Package exports
 │   ├── config.py               # Settings dataclass & environment loaders
@@ -205,7 +250,7 @@ DocuMind-AI/
 │   ├── __init__.py
 │   ├── styles.py               # Custom CSS design system (midnight navy & cyan)
 │   └── components.py           # Reusable KPI cards, source cards, navigation
-├── tests/                      # Automated test suite (20 tests)
+├── tests/                      # Automated test suite (21 tests)
 │   ├── test_chunker.py
 │   ├── test_document_loader.py
 │   ├── test_features_workflow.py
@@ -214,8 +259,8 @@ DocuMind-AI/
 │   ├── test_pipeline.py
 │   └── test_retriever.py
 └── data/                       # Local storage (git-ignored for privacy)
-    ├── uploads/                # Local uploaded PDF documents
-    └── chroma/                 # Persistent ChromaDB vector indices
+    ├── uploads/                # Local uploaded PDF documents (.gitkeep tracked)
+    └── chroma/                 # Persistent ChromaDB vector indices (.gitkeep tracked)
 ```
 
 ---
@@ -245,17 +290,17 @@ Expected output:
 platform win32 -- Python 3.13.1, pytest-9.1.1, pluggy-1.7.0
 rootdir: D:\RAG\DocuMind-AI
 configfile: pytest.ini
-collected 20 items
+collected 21 items
 
-tests\test_chunker.py ..                                                 [ 10%]
-tests\test_document_loader.py .                                          [ 15%]
-tests\test_features_workflow.py ......                                   [ 45%]
-tests\test_local_rag.py ....                                             [ 65%]
-tests\test_ollama_generator.py .....                                     [ 90%]
+tests\test_chunker.py ..                                                 [  9%]
+tests\test_document_loader.py .                                          [ 14%]
+tests\test_features_workflow.py ......                                   [ 42%]
+tests\test_local_rag.py ....                                             [ 61%]
+tests\test_ollama_generator.py ......                                    [ 90%]
 tests\test_pipeline.py .                                                 [ 95%]
 tests\test_retriever.py .                                                [100%]
 
-============================= 20 passed in 31.47s =============================
+============================= 21 passed in 25.36s =============================
 ```
 
 ---
@@ -276,10 +321,19 @@ tests\test_retriever.py .                                                [100%]
 - [x] Citation tracking with 1-indexed page metadata and cosine distance scores
 - [x] Executive summarization and cross-document comparative analysis
 - [x] Midnight navy & electric cyan UI redesign with KPI stat cards
-- [x] Full automated test suite (20 tests covering ingestion, vector store, and generation)
+- [x] Full automated test suite (21 tests covering ingestion, vector store, and generation)
+- [x] Open-source contribution framework (`CONTRIBUTING.md`, `SECURITY.md`, issue/PR templates)
 - [ ] OCR support for scanned documents using Tesseract / PaddleOCR
 - [ ] Support for additional document types (`.docx`, `.txt`, `.md`, `.epub`)
 - [ ] Streaming response support in the chat view
+
+---
+
+## 🤝 Contributing
+
+Contributions are warmly welcome! Whether you are fixing bugs, optimizing prompts, adding document loaders, or improving documentation, please read our [CONTRIBUTING.md](CONTRIBUTING.md) guide before opening a pull request.
+
+Please review our [SECURITY.md](SECURITY.md) for information on reporting security vulnerabilities.
 
 ---
 
@@ -287,10 +341,17 @@ tests\test_retriever.py .                                                [100%]
 
 **Atharv Kiran Nawale**
 - GitHub: [@Atharv428](https://github.com/Atharv428)
-- Project: [DocuMind AI](https://github.com/Atharv428/DocuMind-AI)
+- Project Repository: [https://github.com/Atharv428/DocuMind-AI](https://github.com/Atharv428/DocuMind-AI)
 
 ---
 
 ## 📄 License
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+---
+
+<div align="center">
+  <sub>Built with ❤️ by <a href="https://github.com/Atharv428">Atharv Kiran Nawale</a> using Streamlit, Ollama, and ChromaDB.</sub><br>
+  <sub>If you find DocuMind AI useful, please consider giving it a ⭐ on GitHub!</sub>
+</div>
